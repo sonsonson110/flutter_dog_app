@@ -5,4 +5,8 @@ class DogRepository {
   final dogApiProvider = DogApiProvider();
 
   Future<List<DogModel>> fetchAllDogs() => dogApiProvider.fetchDogList();
+  Future<bool> sendDogFavourite(String imageId) =>
+      dogApiProvider.sendDogFavourite(imageId);
+  Future<bool> getDogFavouriteById(String imageId) =>
+      dogApiProvider.fetchDogFavouriteById(imageId);
 }
