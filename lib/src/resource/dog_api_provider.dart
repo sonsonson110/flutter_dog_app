@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:dog_app/src/model/dog.dart';
+import 'package:dog_app/src/model/dog_favourite_get_response.dart';
+import 'package:dog_app/src/model/dog_favourite_post_response.dart';
 import 'package:http/http.dart' show Client;
 import 'dart:developer';
 
@@ -27,37 +29,58 @@ class DogApiProvider {
     }
   }
 
-  Future<bool> fetchDogFavouriteById(String id) async {
-    log("Start GET favourite for dog-id:$id from api...\n======");
+  Future<List<DogFavouriteGetResponse>?> fetchDogFavouriteByImageId(
+      String imageId) async {
+    log("Start GET favourite for dog-imageId:$imageId from api...\n======");
     final response = await client.get(
-        Uri.parse("https://api.thedogapi.com/v1/favourites?image_id=$id"),
+        Uri.parse("https://api.thedogapi.com/v1/favourites?image_id=$imageId"),
         headers: {"x-api-key": _apiKey});
 
     if (response.statusCode == 200) {
-      log("Successfully GET favourite for dog-id:$id from api...\n======");
+      log("Successfully GET favourite for dog-id:$imageId from api...\n======");
       log("Response: ${response.body}\n======");
+
       List l = json.decode(response.body);
-      return l.isNotEmpty;
+      if (l.isEmpty) {
+        return null;
+      }
+
+      List<DogFavouriteGetResponse> result =
+          l.map((e) => DogFavouriteGetResponse.fromJson(e)).toList();
+      log("api result: $result");
+      return result;
     } else {
       // display error
       log("Response: ${response.body}\n======");
-      return false;
+      throw Exception("Can't get Favourite");
     }
   }
 
-  Future<bool> sendDogFavourite(String imageId) async {
+  Future<DogFavouritePostResponse?> sendDogFavourite(String imageId) async {
     log("Start POST favourite for dog-id:$imageId from api...\n======");
     final response = await client.post(
         Uri.parse("https://api.thedogapi.com/v1/favourites"),
         headers: {"x-api-key": _apiKey, "Content-Type": "application/json"},
         body: json.encode({"image_id": imageId}));
-
+    log("Response: ${response.body}\n======");
     if (response.statusCode == 200) {
-      log("Response: ${response.body}\n======");
+      return DogFavouritePostResponse.fromJson(json.decode(response.body));
+    } else {
+      throw Exception("Cannot send http post dog favourite");
+    }
+  }
+
+  Future<bool> sendDogUnfavourite(int favouriteId) async {
+    log("Start DELETE favourite for favouriteId:$favouriteId from api...\n======");
+    final response = await client.delete(
+      Uri.parse("https://api.thedogapi.com/v1/favourites/$favouriteId"),
+      headers: {"x-api-key": _apiKey, "Content-Type": "application/json"},
+    );
+    log("Response: ${response.body}\n======");
+    if (response.statusCode == 200) {
       return true;
     } else {
-      log("Response: ${response.body}\n======");
-      return false;
+      throw Exception("Cannot send http delete dog favourite");
     }
   }
 }

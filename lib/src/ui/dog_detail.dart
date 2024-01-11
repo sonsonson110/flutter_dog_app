@@ -131,7 +131,7 @@ class _DogDetailState extends State<DogDetail> {
                           itemSnapshot.data! == false ? "Like" : "Liked");
                     } else if (itemSnapshot.hasError) {
                       log(itemSnapshot.error.toString());
-                      const Text("Something wrong :(");
+                      return const Text("Something wrong :(");
                     }
 
                     return const CircularProgressIndicator(
