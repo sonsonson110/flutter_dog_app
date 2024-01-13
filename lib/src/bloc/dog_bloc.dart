@@ -4,13 +4,16 @@ import 'package:rxdart/rxdart.dart';
 
 class DogBloc {
   final _repository = DogRepository();
-  final _dogsFetcher = PublishSubject<List<DogModel>>();
+  final _dogsFetcher = ReplaySubject<DogModel>();
 
-  Stream<List<DogModel>> get allDogs => _dogsFetcher.stream;
+  Stream<DogModel> get newDogNotifier => _dogsFetcher.stream;
+  List<DogModel> get allDogs => _dogsFetcher.values;
 
   fetchAllDogs() async {
     List<DogModel> dogModel = await _repository.fetchAllDogs();
-    _dogsFetcher.sink.add(dogModel);
+    for (final dog in dogModel) {
+      _dogsFetcher.sink.add(dog);
+    }
   }
 
   dispose() {
