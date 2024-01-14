@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:dog_app/src/model/dog.dart';
-import 'package:dog_app/src/model/dog_favourite_get_response.dart';
-import 'package:dog_app/src/model/dog_favourite_post_response.dart';
+import 'package:dog_app/src/model/remote/dog_favourite_get_response.dart';
+import 'package:dog_app/src/model/remote/dog_favourite_post_response.dart';
 import 'package:http/http.dart' show Client;
 import 'dart:developer';
 
@@ -47,7 +47,6 @@ class DogApiProvider {
 
       List<DogFavouriteGetResponse> result =
           l.map((e) => DogFavouriteGetResponse.fromJson(e)).toList();
-      log("api result: $result");
       return result;
     } else {
       // display error

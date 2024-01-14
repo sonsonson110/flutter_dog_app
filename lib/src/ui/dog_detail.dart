@@ -62,57 +62,10 @@ class _DogDetailState extends State<DogDetail> {
 
   DogInfo() {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: dogData.breeds!.isNotEmpty
-          ? Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(
-                dogData.breeds![0].name != null
-                    ? "name: ${dogData.breeds![0].name}"
-                    : "unknown",
-                style: TextStyle(fontSize: FONT_NORMAL_SIZE),
-              ),
-              Text(
-                dogData.breeds![0].bredFor != null
-                    ? "bredFor: ${dogData.breeds![0].bredFor}"
-                    : "unknown",
-                style: TextStyle(fontSize: FONT_NORMAL_SIZE),
-              ),
-              Text(
-                dogData.breeds![0].weight?.metric != null
-                    ? "weight in metric: ${dogData.breeds![0].weight!.metric.toString()}kg"
-                    : "unknown",
-                style: TextStyle(fontSize: FONT_NORMAL_SIZE),
-              ),
-              Text(
-                dogData.breeds![0].weight?.imperial != null
-                    ? "weight in oz: ${dogData.breeds![0].weight!.imperial.toString()}oz"
-                    : "unknown",
-                style: TextStyle(fontSize: FONT_NORMAL_SIZE),
-              ),
-              Text(
-                dogData.breeds![0].breedGroup != null
-                    ? "breedGroup: ${dogData.breeds![0].breedGroup}"
-                    : "unknown",
-                style: TextStyle(fontSize: FONT_NORMAL_SIZE),
-              ),
-              Text(
-                dogData.breeds![0].lifeSpan != null
-                    ? "lifeSpan: ${dogData.breeds![0].lifeSpan}"
-                    : "unknown",
-                style: TextStyle(fontSize: FONT_NORMAL_SIZE),
-              ),
-              Text(
-                dogData.breeds![0].temperament != null
-                    ? "temperament: ${dogData.breeds![0].temperament}"
-                    : "unknown",
-                style: TextStyle(fontSize: FONT_NORMAL_SIZE),
-              ),
-            ])
-          : Text(
-              "Unknown data",
-              style: TextStyle(fontSize: FONT_NORMAL_SIZE),
-            ),
-    );
+        padding: const EdgeInsets.all(8.0),
+        child: dogData.breeds!.isNotEmpty
+            ? Text(dogData.toString())
+            : const Text("no data"));
   }
 
   DogFavourite() {
@@ -126,7 +79,6 @@ class _DogDetailState extends State<DogDetail> {
                   future: snapshot.data,
                   builder: (context, itemSnapshot) {
                     if (itemSnapshot.hasData) {
-                      log("ui response data: ${itemSnapshot.data}");
                       return Text(
                           itemSnapshot.data! == false ? "Like" : "Liked");
                     } else if (itemSnapshot.hasError) {

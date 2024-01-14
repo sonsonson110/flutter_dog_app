@@ -20,7 +20,7 @@ class DogModel {
     height = json['height'];
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = <String, dynamic>{};
     if (breeds != null) {
       data['breeds'] = breeds!.map((v) => v.toJson()).toList();
@@ -30,6 +30,17 @@ class DogModel {
     data['width'] = width;
     data['height'] = height;
     return data;
+  }
+
+  @override
+  String toString() {
+    return 'DogModel {\n'
+        '  breeds: $breeds,\n'
+        '  id: $id,\n'
+        '  url: $url,\n'
+        '  width: $width,\n'
+        '  height: $height\n'
+        '}';
   }
 }
 
@@ -84,6 +95,21 @@ class Breeds {
     data['reference_image_id'] = referenceImageId;
     return data;
   }
+
+  @override
+  String toString() {
+    return 'Breeds {\n'
+        '  weight: $weight,\n'
+        '  height: $height,\n'
+        '  id: $id,\n'
+        '  name: $name,\n'
+        '  bredFor: $bredFor,\n'
+        '  breedGroup: $breedGroup,\n'
+        '  lifeSpan: $lifeSpan,\n'
+        '  temperament: $temperament,\n'
+        '  referenceImageId: $referenceImageId\n'
+        '}';
+  }
 }
 
 class Weight {
@@ -102,5 +128,13 @@ class Weight {
     data['imperial'] = imperial;
     data['metric'] = metric;
     return data;
+  }
+
+  @override
+  String toString() {
+    return 'Weight {\n'
+        '  imperial: $imperial,\n'
+        '  metric: $metric\n'
+        '}';
   }
 }

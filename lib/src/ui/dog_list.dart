@@ -2,8 +2,10 @@ import 'dart:developer';
 
 import 'package:dog_app/src/bloc/dog_bloc.dart';
 import 'package:dog_app/src/bloc/dog_detail_bloc_provider.dart';
+import 'package:dog_app/src/bloc/dog_favourite_bloc_provider.dart';
 import 'package:dog_app/src/model/dog.dart';
 import 'package:dog_app/src/ui/dog_detail.dart';
+import 'package:dog_app/src/ui/dog_favourite.dart';
 import 'package:flutter/material.dart';
 
 class DogList extends StatefulWidget {
@@ -48,6 +50,14 @@ class _DogListState extends State<DogList> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Your daily doge app"),
+        actions: [
+          IconButton(
+              onPressed: openFavouritedPage,
+              icon: const Icon(
+                Icons.favorite,
+                color: Colors.black,
+              ))
+        ],
       ),
       body: StreamBuilder(
         stream: bloc.newDogNotifier,
@@ -81,7 +91,7 @@ class _DogListState extends State<DogList> {
                   dogs[index].url!,
                   fit: BoxFit.cover,
                 ),
-                onTap: () => openDetailPage(dogs[index], index),
+                onTap: () => openDetailPage(dogs[index]),
               )
             : const Text("fail to load");
       },
@@ -90,16 +100,19 @@ class _DogListState extends State<DogList> {
   }
 
   // add navigator
-  openDetailPage(DogModel data, int index) {
+  openDetailPage(DogModel data) {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      // return DogDetail(
-      //   dogData: data,
-      // );
       return DogDetailBlocProvider(
         child: DogDetail(
           dogData: data,
         ),
       );
+    }));
+  }
+
+  openFavouritedPage() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return DogFavouriteBlocProvider(child: const DogFavourite());
     }));
   }
 }
