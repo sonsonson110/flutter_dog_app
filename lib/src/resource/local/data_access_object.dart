@@ -2,8 +2,8 @@
 
 import 'dart:developer';
 
+import 'package:dog_app/src/model/dog.dart';
 import 'package:dog_app/src/resource/local/database.dart';
-import 'package:dog_app/src/resource/local/entity/dog.dart';
 
 class DogDAO {
   final dbProvider = DatabaseProvider.dbProvider;
@@ -26,10 +26,10 @@ class DogDAO {
   ''';
 
   // Add new dog record
-  Future<int> createDog(DogEntity dogEntity) async {
+  Future<int> createDog(DogModel dogModel) async {
     final db = await dbProvider.database;
     var result = db.insert(DatabaseProvider.dogTABLE,
-        dogEntity.toMap()); // this return id of new record
+        dogModel.toMap()); // this return id of new record
     return result;
   }
 
