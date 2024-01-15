@@ -13,7 +13,7 @@ class DatabaseProvider {
 
   static const createDogTableSql = '''
     CREATE TABLE $dogTABLE (
-            id INTEGER PRIMARY KEY,
+            id TEXT PRIMARY KEY,
             url TEXT NOT NULL,
             imageName TEXT NOT NULL
         );
@@ -29,7 +29,7 @@ class DatabaseProvider {
   static const createSavedDogTable = '''
     CREATE TABLE $savedDogTABLE (
         id INTEGER PRIMARY KEY,
-        dogId INTEGER REFERENCES tblDog(id) ON DELETE CASCADE ON UPDATE CASCADE,
+        dogId TEXT REFERENCES tblDog(id) ON DELETE CASCADE ON UPDATE CASCADE,
         breedId INTEGER REFERENCES tblBreed(id) ON DELETE CASCADE ON UPDATE CASCADE
     );
   ''';
@@ -68,10 +68,10 @@ class DatabaseProvider {
     await database.execute(createSavedDogTable);
     // sample data
     String sampleInsertDog = '''
-      INSERT INTO $dogTABLE (url, imageName) VALUES
-          ('https://example.com/dog1.jpg', 'dog1'),
-          ('https://example.com/dog2.jpg', 'dog2'),
-          ('https://example.com/dog3.jpg', 'dog3');
+      INSERT INTO $dogTABLE (id, url, imageName) VALUES
+          ('1', 'https://example.com/dog1.jpg', 'dog1'),
+          ('2', 'https://example.com/dog2.jpg', 'dog2'),
+          ('3', 'https://example.com/dog3.jpg', 'dog3');
     ''';
     String sampleInsertBreed = '''
       INSERT INTO $breedTABLE (name, temperament) VALUES
@@ -81,12 +81,12 @@ class DatabaseProvider {
     ''';
     String sampleInsertSavedDog = '''
       INSERT INTO $savedDogTABLE (dogId, breedId) VALUES
-          (1, 1),
-          (1, 2),
-          (2, 2),
-          (2, 3),
-          (3, 1),
-          (3, 3);
+          ('1', 1),
+          ('1', 2),
+          ('2', 2),
+          ('2', 3),
+          ('3', 1),
+          ('3', 3);
     ''';
     await database.execute(sampleInsertDog);
     await database.execute(sampleInsertBreed);

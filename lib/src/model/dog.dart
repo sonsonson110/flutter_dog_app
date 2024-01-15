@@ -20,6 +20,12 @@ class DogModel {
     height = json['height'];
   }
 
+  DogModel.fromLocalDbMap(Map<String, dynamic> map) {
+    id = map["id"];
+    url = map["url"];
+    breeds = map["breeds"];
+  }
+
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = <String, dynamic>{};
     if (breeds != null) {
