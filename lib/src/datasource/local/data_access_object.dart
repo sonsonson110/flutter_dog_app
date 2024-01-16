@@ -3,7 +3,7 @@
 import 'dart:developer';
 
 import 'package:dog_app/src/model/dog.dart';
-import 'package:dog_app/src/resource/local/database.dart';
+import 'package:dog_app/src/datasource/local/database.dart';
 
 class DogDAO {
   final dbProvider = DatabaseProvider.dbProvider;
@@ -42,7 +42,7 @@ class DogDAO {
   }
 
   // Get all dogs
-  Future<void> getFavouriteDogs() async {
+  Future<List<DogModel>> getFavouriteDogs() async {
     final db = await dbProvider.database;
 
     List<Map<String, dynamic>> result = await db.rawQuery(GET_ALL_DOGS_SQL);
@@ -71,5 +71,6 @@ class DogDAO {
     }
 
     log("Processed DogModel list: $dogList");
+    return dogList;
   }
 }

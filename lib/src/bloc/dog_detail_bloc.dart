@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:dog_app/src/resource/dog_repository.dart';
+import 'package:dog_app/src/datasource/dog_repository.dart';
 import 'package:rxdart/rxdart.dart';
 
 class DogDetailBloc {
