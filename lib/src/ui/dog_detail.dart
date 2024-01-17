@@ -1,8 +1,10 @@
 import 'dart:developer';
+import 'dart:typed_data';
 
 import 'package:dog_app/src/bloc/dog_detail_bloc.dart';
 import 'package:dog_app/src/bloc/dog_detail_bloc_provider.dart';
 import 'package:dog_app/src/model/dog.dart';
+import 'package:dog_app/utils/image_utils.dart';
 import 'package:flutter/material.dart';
 
 class DogDetail extends StatefulWidget {
@@ -15,6 +17,7 @@ class DogDetail extends StatefulWidget {
 
 class _DogDetailState extends State<DogDetail> {
   final DogModel dogData;
+  Uint8List? imageBytes;
   late DogDetailBloc bloc;
 
   final FONT_TITLE_SIZE = 30.0;
@@ -50,14 +53,30 @@ class _DogDetailState extends State<DogDetail> {
             bottom: false,
             child: ListView(
               children: <Widget>[
-                Image.network(
-                  dogData.url!,
-                  fit: BoxFit.cover,
-                ),
+                // Image.network(
+                //   dogData.url!,
+                //   fit: BoxFit.cover,
+                // ),
+                DogImage(),
                 DogFavourite(),
                 DogInfo(),
               ],
             )));
+  }
+
+  Widget DogImage() {
+    final imageFetch = ImageUtils.getImageBytes(dogData.url!);
+    return FutureBuilder(
+        future: imageFetch,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            imageBytes = snapshot.data!;
+            return Image.memory(imageBytes!);
+          } else if (snapshot.hasError) {
+            return const Text("Failed to load image");
+          }
+          return const CircularProgressIndicator();
+        });
   }
 
   DogInfo() {
@@ -70,7 +89,7 @@ class _DogDetailState extends State<DogDetail> {
 
   DogFavourite() {
     return FilledButton(
-      onPressed: () => bloc.onDogFavourite(dogData),
+      onPressed: () => bloc.onDogFavourite(dogData, imageBytes),
       child: StreamBuilder(
           stream: bloc.favouriteType,
           builder: (context, snapshot) {

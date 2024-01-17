@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:typed_data';
 import 'package:dog_app/src/datasource/dog_repository.dart';
 import 'package:dog_app/src/model/dog.dart';
+import 'package:dog_app/utils/image_utils.dart';
 import 'package:rxdart/rxdart.dart';
 
 class DogDetailBloc {
@@ -26,10 +28,10 @@ class DogDetailBloc {
     _favouriteType.sink.add(fetchFavourite);
   }
 
-  void onDogFavourite(DogModel dogData) {
+  void onDogFavourite(DogModel dogData, Uint8List? imageBytes) {
     if (_favouriteId == null) {
       _sendDogFavourite(dogData);
-      _saveFavouriteDog(dogData);
+      _saveFavouriteDog(dogData, imageBytes);
     } else {
       _sendDogUnfavourite(dogData);
     }
@@ -52,8 +54,11 @@ class DogDetailBloc {
     _favouriteId = null;
   }
 
-  void _saveFavouriteDog(DogModel dogData) async {
-    await _repository.saveDogToDatabase(dogData);
+  void _saveFavouriteDog(DogModel dogData, Uint8List? imageBytes) async {
+    String currentTimestamp = DateTime.now().millisecondsSinceEpoch.toString();
+    await _repository.saveDogToDatabase(dogData, currentTimestamp);
+    if (imageBytes == null) return;
+    ImageUtils.saveImageToLocal(imageBytes, currentTimestamp);
   }
 
   void dispose() async {

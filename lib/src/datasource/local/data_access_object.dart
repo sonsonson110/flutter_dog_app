@@ -34,11 +34,11 @@ class DogDAO {
   ''';
 
   // Add new dog record
-  Future<void> createDog(DogModel dogModel) async {
+  Future<void> createDog(DogModel dogModel, String imageName) async {
     final db = await dbProvider.database;
     // add to dog table
     var dogResult = await db.insert(
-        DatabaseProvider.dogTABLE, dogModel.toLocalDbMap(),
+        DatabaseProvider.dogTABLE, dogModel.toLocalDbMap(imageName),
         conflictAlgorithm:
             ConflictAlgorithm.abort); // this return id of new record
     log("record ${dogModel.id} to dog table. returned id: $dogResult");
