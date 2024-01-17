@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
-
 import 'package:dog_app/src/datasource/dog_repository.dart';
+import 'package:dog_app/src/model/dog.dart';
 import 'package:rxdart/rxdart.dart';
 
 class DogDetailBloc {
@@ -26,25 +26,34 @@ class DogDetailBloc {
     _favouriteType.sink.add(fetchFavourite);
   }
 
-  void sendDogFavourite(String imageId) {
+  void onDogFavourite(DogModel dogData) {
     if (_favouriteId == null) {
-      final fetch = _repository.sendDogFavourite(imageId);
-      final updatedFavourite = fetch.then((response) {
-        _favouriteId = response?.id;
-        return response != null;
-      });
-      _favouriteType.sink.add(updatedFavourite);
+      _sendDogFavourite(dogData);
+      _saveFavouriteDog(dogData);
     } else {
-      _sendDogUnfavourite();
+      _sendDogUnfavourite(dogData);
     }
   }
 
-  void _sendDogUnfavourite() {
+  void _sendDogFavourite(DogModel dogData) async {
+    final fetch = _repository.sendDogFavourite(dogData.id!);
+    final updatedFavourite = fetch.then((response) {
+      _favouriteId = response?.id;
+      return response != null;
+    });
+    _favouriteType.sink.add(updatedFavourite);
+  }
+
+  void _sendDogUnfavourite(DogModel dogData) {
     if (_favouriteId == null) return;
     final fetch = _repository.sendDogUnfavourite(_favouriteId!);
     final Future<bool> updatedFavourite = fetch.then((value) => !value);
     _favouriteType.sink.add(updatedFavourite);
     _favouriteId = null;
+  }
+
+  void _saveFavouriteDog(DogModel dogData) async {
+    await _repository.saveDogToDatabase(dogData);
   }
 
   void dispose() async {

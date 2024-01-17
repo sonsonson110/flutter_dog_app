@@ -21,4 +21,7 @@ class DogRepository {
       _dogApiProvider.sendDogUnfavourite(favouriteId);
 
   Future<List<DogModel>> getLocalFavouriteDogs() => _dogDAO.getFavouriteDogs();
+
+  Future<void> saveDogToDatabase(DogModel dogModel) =>
+      _dogDAO.createDog(dogModel);
 }

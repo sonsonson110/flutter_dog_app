@@ -70,7 +70,7 @@ class _DogDetailState extends State<DogDetail> {
 
   DogFavourite() {
     return FilledButton(
-      onPressed: () => bloc.sendDogFavourite(dogData.id!),
+      onPressed: () => bloc.onDogFavourite(dogData),
       child: StreamBuilder(
           stream: bloc.favouriteType,
           builder: (context, snapshot) {

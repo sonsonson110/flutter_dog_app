@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'package:dog_app/src/model/dog.dart';
 import 'package:dog_app/src/datasource/local/database.dart';
+import 'package:sqflite/sqflite.dart';
 
 class DogDAO {
   final dbProvider = DatabaseProvider.dbProvider;
@@ -26,19 +27,35 @@ class DogDAO {
         tblBreed.temperament AS $breedTemperamentColumn
     FROM
         tblDog
-    JOIN
+    LEFT OUTER JOIN
         tblSavedDog ON tblDog.id = tblSavedDog.dogId
-    JOIN
+    LEFT OUTER JOIN
         tblBreed ON tblSavedDog.breedId = tblBreed.id
   ''';
 
   // Add new dog record
-  Future<int> createDog(DogModel dogModel) async {
+  Future<void> createDog(DogModel dogModel) async {
     final db = await dbProvider.database;
-    var result = db.insert(DatabaseProvider.dogTABLE,
-        dogModel.toMap()); // this return id of new record
-    log("record ${dogModel.id} to local database. returned id: $result");
-    return result;
+    // add to dog table
+    var dogResult = await db.insert(
+        DatabaseProvider.dogTABLE, dogModel.toLocalDbMap(),
+        conflictAlgorithm:
+            ConflictAlgorithm.abort); // this return id of new record
+    log("record ${dogModel.id} to dog table. returned id: $dogResult");
+
+    // add each breed to breed table
+    for (final breed in dogModel.breeds!) {
+      var breedResult = await db.insert(
+          DatabaseProvider.breedTABLE, breed.toLocalDbMap(),
+          conflictAlgorithm: ConflictAlgorithm.abort);
+      log("record ${breed.id} to breed table. returned id: $breedResult");
+
+      // also add dog-breed relationship to external table
+      var savedDogResult = await db.insert(DatabaseProvider.savedDogTABLE,
+          {"dogId": dogModel.id, "breedId": breed.id},
+          conflictAlgorithm: ConflictAlgorithm.abort);
+      log("record ${breed.id} to saved dog table. returned id: $savedDogResult");
+    }
   }
 
   // Get all dogs

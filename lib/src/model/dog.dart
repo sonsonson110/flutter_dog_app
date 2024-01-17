@@ -38,6 +38,14 @@ class DogModel {
     return data;
   }
 
+  Map<String, dynamic> toLocalDbMap() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["id"] = id;
+    data["url"] = url;
+    data["imageName"] = "Placeholder";
+    return data;
+  }
+
   @override
   String toString() {
     return 'DogModel {\n'
@@ -99,6 +107,14 @@ class Breeds {
     data['life_span'] = lifeSpan;
     data['temperament'] = temperament;
     data['reference_image_id'] = referenceImageId;
+    return data;
+  }
+
+  Map<String, dynamic> toLocalDbMap() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["id"] = id;
+    data["name"] = name;
+    data["temperament"] = temperament;
     return data;
   }
 
