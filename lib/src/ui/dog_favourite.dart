@@ -1,8 +1,10 @@
 import 'dart:developer';
+import 'dart:typed_data';
 
 import 'package:dog_app/src/bloc/dog_favourite_bloc.dart';
 import 'package:dog_app/src/bloc/dog_favourite_bloc_provider.dart';
 import 'package:dog_app/src/model/dog.dart';
+import 'package:dog_app/utils/image_utils.dart';
 import 'package:flutter/material.dart';
 
 class DogFavourite extends StatefulWidget {
@@ -53,9 +55,29 @@ class _DogFavouriteState extends State<DogFavourite> {
   buildList(List<DogModel> itemList) {
     return ListView.builder(
       itemBuilder: (context, index) {
-        return Text(itemList[index].toString());
+        return Column(
+          children: [
+            DogImage(itemList[index].id!),
+            Text(itemList[index].toString()),
+          ],
+        );
       },
       itemCount: itemList.length,
     );
+  }
+
+  DogImage(String imageName) {
+    final futureImage = ImageUtils.getImageFromLocal(imageName);
+    return FutureBuilder(
+        future: futureImage,
+        builder: ((context, snapshot) {
+          if (snapshot.hasData) {
+            Uint8List imageBytes = snapshot.data!;
+            return Image.memory(imageBytes);
+          } else if (snapshot.hasError) {
+            return const Text("Fail to load image from storage");
+          }
+          return const CircularProgressIndicator();
+        }));
   }
 }

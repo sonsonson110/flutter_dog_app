@@ -38,11 +38,10 @@ class DogModel {
     return data;
   }
 
-  Map<String, dynamic> toLocalDbMap(String imageName) {
+  Map<String, dynamic> toLocalDbMap() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data["id"] = id;
     data["url"] = url;
-    data["imageName"] = imageName;
     return data;
   }
 

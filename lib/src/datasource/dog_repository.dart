@@ -22,6 +22,6 @@ class DogRepository {
 
   Future<List<DogModel>> getLocalFavouriteDogs() => _dogDAO.getFavouriteDogs();
 
-  Future<void> saveDogToDatabase(DogModel dogModel, String imageName) =>
-      _dogDAO.createDog(dogModel, imageName);
+  Future<void> saveDogToDatabase(DogModel dogModel) =>
+      _dogDAO.createDog(dogModel);
 }

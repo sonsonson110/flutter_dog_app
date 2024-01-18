@@ -14,8 +14,7 @@ class DatabaseProvider {
   static const createDogTableSql = '''
     CREATE TABLE $dogTABLE (
             id TEXT PRIMARY KEY,
-            url TEXT NOT NULL,
-            imageName TEXT NOT NULL
+            url TEXT NOT NULL
         );
     ''';
 
@@ -66,31 +65,6 @@ class DatabaseProvider {
     await database.execute(createDogTableSql);
     await database.execute(createBreedTableSql);
     await database.execute(createSavedDogTable);
-    // sample data
-    // String sampleInsertDog = '''
-    //   INSERT INTO $dogTABLE (id, url, imageName) VALUES
-    //       ('1', 'https://example.com/dog1.jpg', 'dog1'),
-    //       ('2', 'https://example.com/dog2.jpg', 'dog2'),
-    //       ('3', 'https://example.com/dog3.jpg', 'dog3');
-    // ''';
-    // String sampleInsertBreed = '''
-    //   INSERT INTO $breedTABLE (name, temperament) VALUES
-    //       ('Breed1', 'Temperament1'),
-    //       ('Breed2', 'Temperament2'),
-    //       ('Breed3', 'Temperament3');
-    // ''';
-    // String sampleInsertSavedDog = '''
-    //   INSERT INTO $savedDogTABLE (dogId, breedId) VALUES
-    //       ('1', 1),
-    //       ('1', 2),
-    //       ('2', 2),
-    //       ('2', 3),
-    //       ('3', 1),
-    //       ('3', 3);
-    // ''';
-    // await database.execute(sampleInsertDog);
-    // await database.execute(sampleInsertBreed);
-    // await database.execute(sampleInsertSavedDog);
     log("database initialized");
   }
 }

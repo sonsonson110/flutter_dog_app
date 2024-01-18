@@ -11,7 +11,6 @@ class DogDAO {
 
   static const dogIdColumn = "dogId";
   static const dogUrlColumn = "url";
-  static const dogImageNameColumn = "imageName";
 
   static const breedIdColumn = "breedId";
   static const breedNameColumn = "name";
@@ -21,7 +20,6 @@ class DogDAO {
     SELECT
         tblDog.id AS $dogIdColumn,
         tblDog.url AS $dogUrlColumn,
-        tblDog.imageName AS $dogImageNameColumn,
         tblBreed.id AS $breedIdColumn,
         tblBreed.name AS $breedNameColumn,
         tblBreed.temperament AS $breedTemperamentColumn
@@ -34,11 +32,11 @@ class DogDAO {
   ''';
 
   // Add new dog record
-  Future<void> createDog(DogModel dogModel, String imageName) async {
+  Future<void> createDog(DogModel dogModel) async {
     final db = await dbProvider.database;
     // add to dog table
     var dogResult = await db.insert(
-        DatabaseProvider.dogTABLE, dogModel.toLocalDbMap(imageName),
+        DatabaseProvider.dogTABLE, dogModel.toLocalDbMap(),
         conflictAlgorithm:
             ConflictAlgorithm.abort); // this return id of new record
     log("record ${dogModel.id} to dog table. returned id: $dogResult");

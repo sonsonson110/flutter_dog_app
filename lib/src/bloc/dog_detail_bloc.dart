@@ -55,10 +55,9 @@ class DogDetailBloc {
   }
 
   void _saveFavouriteDog(DogModel dogData, Uint8List? imageBytes) async {
-    String currentTimestamp = DateTime.now().millisecondsSinceEpoch.toString();
-    await _repository.saveDogToDatabase(dogData, currentTimestamp);
+    await _repository.saveDogToDatabase(dogData);
     if (imageBytes == null) return;
-    ImageUtils.saveImageToLocal(imageBytes, currentTimestamp);
+    ImageUtils.saveImageToLocal(imageBytes, dogData.id!);
   }
 
   void dispose() async {
